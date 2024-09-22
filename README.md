@@ -2,6 +2,6 @@
 
 ## Tim & Kristofer
 
-create branch: git checkout -b [branch name]
-git checkout [branch name]
+<br>create branch: git checkout -b [branch name] </br>
+<br>git checkout [branch name]</br>
 <br>git pull origin main</br>
