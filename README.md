@@ -2,4 +2,4 @@
 
 ## Tim & Kristofer
 
-create branch: git checkout -b <branch name>
+create branch: git checkout -b < branch name >
