@@ -1,0 +1,9 @@
+USE ROLE USERADMIN;
+
+CREATE USER IF NOT EXISTS TimExamUser
+    PASSWORD = 'TimExamUser123'
+    DEFAULT_WAREHOUSE = exam_wh;
+
+CREATE USER IF NOT EXISTS KristoferExamUser
+    PASSWORD = 'KristoferExamUser123'
+    DEFAULT_WAREHOUSE = exam_wh;
