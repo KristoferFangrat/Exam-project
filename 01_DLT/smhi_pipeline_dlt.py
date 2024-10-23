@@ -2,13 +2,14 @@ import dlt
 import requests
 import os
 from pathlib import Path
+import pandas as pd
 
-
-url = "https://polisen.se/api/events"
+url = f"https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/data.json"
 def get_events():
     response = requests.get(url)
     response.raise_for_status()
     return response.json()
+
 
 
 @dlt.resource(write_disposition="append")
@@ -24,7 +25,7 @@ def load_stuff() -> None:
     p = dlt.pipeline(
         pipeline_name='snowflake_pipeline_pipeline',
         destination='snowflake',
-        dataset_name='Staging1',
+        dataset_name='Staging2',
     )
 
     p.run(event_resource())
