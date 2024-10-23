@@ -1,0 +1,10 @@
+USE DATABASE EXAM_DB;
+USE WAREHOUSE EXAM_WH;
+USE SCHEMA STAGING1;
+USE ROLE EXAMDLTROLE;
+
+
+
+SELECT *
+FROM event_resource;
+"""WHERE type = 'Trafikolycka';"""
