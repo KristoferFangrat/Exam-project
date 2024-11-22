@@ -6,3 +6,5 @@ SELECT
     location_gps
 
 FROM src_location
+WHERE location_name IS NOT NULL
+AND location_gps IS NOT NULL

@@ -4,4 +4,5 @@ SELECT
     {{ dbt_utils.generate_surrogate_key(['id', 'datetime'])}} AS date_id,
     datetime
 
-FROM src_date ORDER BY datetime DESC
+FROM src_date
+WHERE datetime IS NOT NULL
