@@ -3,6 +3,7 @@ import requests
 import os
 from pathlib import Path
 import pandas as pd
+import smhi_open_data as sod
 
 url = f"https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/data.json"
 def get_events():
@@ -35,3 +36,4 @@ if __name__ == "__main__":
     working_directory = Path(__file__).parent
     os.chdir(working_directory)
     load_stuff()
+    
