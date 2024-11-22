@@ -3,14 +3,47 @@ import requests
 import os
 from pathlib import Path
 import pandas as pd
+Timsbranch
 import smhi_open_data as sod
 
-url = f"https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/data.json"
+from datetime import datetime
+
+# Ange koordinater för platsen
+latitude = 64.750244
+longitude = 20.950917
+
+api_url = f"https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/{longitude}/lat/{latitude}/data.json"
+
 def get_events():
-    response = requests.get(url)
+    response = requests.get(api_url)
     response.raise_for_status()
     return response.json()
 
+def extract_relevant_data_smhi(weather_data, start_index, end_index):
+    relevant_data = []
+    for entry in weather_data["timeSeries"][start_index:end_index]:
+        valid_time = entry["validTime"]
+        tid = datetime.fromisoformat(valid_time[:])
+
+        är_nederbörd = False
+        for parameter in entry["parameters"]:
+            if parameter["name"] == "t":
+                temperature = parameter["values"][0]
+            elif parameter["name"] == "pcat" and parameter["values"][0] > 0:
+                är_nederbörd = True
+                
+        if är_nederbörd:
+            precipitation = "Nederbörd"
+        else:
+            precipitation = "Ingen nederbörd"
+
+        relevant_data.append({
+            "Tid": tid,
+            "Temperatur (°C)": temperature,
+            "Nederbörd": precipitation,
+            "Provider": "SMHI"
+        })
+    return relevant_data
 
 
 @dlt.resource(write_disposition="append")
@@ -28,7 +61,6 @@ def load_stuff() -> None:
         destination='snowflake',
         dataset_name='Staging2',
     )
-
     p.run(event_resource())
 
 
