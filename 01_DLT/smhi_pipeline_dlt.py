@@ -3,6 +3,9 @@ import requests
 import os
 from pathlib import Path
 import pandas as pd
+Timsbranch
+import smhi_open_data as sod
+
 from datetime import datetime
 
 # Ange koordinater för platsen
@@ -65,3 +68,4 @@ if __name__ == "__main__":
     working_directory = Path(__file__).parent
     os.chdir(working_directory)
     load_stuff()
+    

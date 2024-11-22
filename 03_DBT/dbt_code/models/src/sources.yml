@@ -1,7 +1,8 @@
 sources:
-    - names: xx
-    schema: xx
-    tables:
-        - name: stg_data_ads
-          identifier: data_field_job_ads
-          
+    - name: EXAM_DB
+      schema: STAGING1
+      tables:
+        - name: EVENT_RESOURCE
+          identifier: EVENT_RESOURCE
+        - name: EVENT_WEATHER
+          identifier: EVENT_WEATHER
