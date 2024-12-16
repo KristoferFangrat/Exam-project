@@ -3,7 +3,8 @@ date AS (SELECT * FROM {{ ref('dim_date') }}),
 info AS (SELECT * FROM {{ ref('dim_info') }}),
 location AS (SELECT * FROM {{ ref('dim_location') }})
 
-SELECT 
+SELECT
+    {{ dbt_utils.generate_surrogate_key(['info_name', 'info_summary']) }} AS mart_id,
     info_name,
     info_summary,
     location_name,
