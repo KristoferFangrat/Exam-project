@@ -1,0 +1,44 @@
+models:
+    - name: dim_date
+      columns:
+        - name: date_id
+          data_tests:
+            - not_null
+            - unique
+        - name: datetime
+          data_tests:
+            - not_null
+    - name: dim_info
+      columns:
+        - name: info_id
+          data_tests:
+          - not_null
+          - unique
+        - name: info_name
+          data_tests:
+          - not_null
+        - name: info_summary
+          data_tests:
+          - not_null
+    - name: dim_location
+      columns:
+        - name: location_id
+          data_tests:
+          - not_null
+          - unique
+        - name: location_name
+          data_tests:
+          - not_null
+        - name: location_gps
+          data_tests:
+          - not_null
+          - name: location_gps
+          data_tests:
+          - not_null
+    - name: fct_events
+      columns:
+        - name: date_key
+          data_tests:
+            - relationships:
+                to: ref('dim_date')
+                field: date_id

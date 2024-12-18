@@ -1,0 +1,36 @@
+USE ROLE EXAMDBTROLE;
+
+USE DATABASE EXAM_DB;
+
+USE WAREHOUSE EXAM_WH;
+
+USE SCHEMA STAGING1;
+
+
+SELECT Name, URL, COUNT(*) AS duplicate_count
+FROM EVENT_RESOURCE
+GROUP BY Name, URL
+HAVING COUNT(*) > 1;
+
+WITH CTE AS (
+    SELECT 
+        *,
+        ROW_NUMBER() OVER (PARTITION BY Name, URL ORDER BY ID) AS row_num
+    FROM EVENT_RESOURCE
+)
+SELECT * FROM CTE WHERE row_num > 1; -- View duplicates to be deleted
+
+
+DELETE FROM EVENT_RESOURCE
+WHERE ID IN (
+    SELECT ID
+    FROM (
+        SELECT 
+            ID,
+            ROW_NUMBER() OVER (PARTITION BY Name, URL ORDER BY ID) AS row_num
+        FROM EVENT_RESOURCE
+    ) subquery
+    WHERE row_num > 1
+);
+
+

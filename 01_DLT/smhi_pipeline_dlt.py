@@ -2,6 +2,13 @@ import dlt
 import requests
 import os
 from pathlib import Path
+<<<<<<< HEAD
+=======
+import pandas as pd
+Timsbranch
+import smhi_open_data as sod
+
+>>>>>>> 4c71c1686068e0d9e3726d16f277e4d62ea57fd1
 from datetime import datetime
 
 # Ange koordinater för platsen
@@ -58,5 +65,9 @@ if __name__ == "__main__":
     working_directory = Path(__file__).parent
     os.chdir(working_directory)
     load_stuff()
+<<<<<<< HEAD
 
 # OLiEVoiNA_1915!
+=======
+    
+>>>>>>> 4c71c1686068e0d9e3726d16f277e4d62ea57fd1
