@@ -33,4 +33,15 @@ WHERE ID IN (
     WHERE row_num > 1
 );
 
+USE DATABASE EXAM_DB; 
 
+DROP TABLE WEATHER_RESOURCE;
+
+CREATE TABLE IF NOT EXISTS EXAM_DB.STAGING1.WEATHER_RESOURCE (
+    id INT,
+    lat FLOAT,
+    lon FLOAT,
+    time TIMESTAMP,
+    temperature FLOAT,
+    precipitation FLOAT
+);

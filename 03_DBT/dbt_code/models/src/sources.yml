@@ -4,5 +4,5 @@ sources:
       tables:
         - name: EVENT_RESOURCE
           identifier: EVENT_RESOURCE
-        - name: EVENT_WEATHER
-          identifier: EVENT_WEATHER
+        - name: WEATHER_RESOURCE
+          identifier: WEATHER_RESOURCE
