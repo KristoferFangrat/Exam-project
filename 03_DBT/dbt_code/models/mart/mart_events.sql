@@ -12,7 +12,8 @@ SELECT DISTINCT
     location_gps,
     datetime,
     weather.TEMPERATURE,
-    weather.PRECIPITATION
+    weather.PRECIPITATION,
+    REGEXP_SUBSTR(info_name, ', (.*?),', 1, 1, 'e', 1) AS category
 
 FROM events
 LEFT JOIN info ON events.info_key = info.info_id
