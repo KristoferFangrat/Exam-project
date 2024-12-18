@@ -1,5 +1,5 @@
 import streamlit as st
-from connect import query_events
+from connect_data_warehouse import query_events
 
 
 def layout():

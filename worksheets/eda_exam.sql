@@ -1,10 +1,13 @@
 USE DATABASE EXAM_DB;
 USE WAREHOUSE EXAM_WH;
-USE SCHEMA STAGING1;
+USE SCHEMA STAGING2;
 USE ROLE EXAMDLTROLE;
 
 
 
 SELECT *
 FROM event_resource;
-"""WHERE type = 'Trafikolycka';"""
+"""WHERE type = 'Trafikolycka';""";
+
+SELECT *
+FROM resource_smhi;

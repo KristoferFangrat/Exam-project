@@ -5,11 +5,48 @@ from datetime import datetime
 import os
 from pathlib import Path
 
+<<<<<<< HEAD
+# Initialize the SMHI client
+client = SMHIOpenDataClient()
+
+# Get available parameters (optional, if you need to know what parameters are supported)
+parameters = client.list_parameters()
+print(parameters)
+
+
+# Replace with your location's latitude and longitude
+latitude = 59.3293  # Example for Stockholm
+longitude = 18.0686
+
+# Get the closest weather station to your location
+closest_station = client.get_closest_station(latitude=latitude, longitude=longitude)
+print(f"Closest Station: {closest_station}")
+
+
+# Get the current date and time
+current_time = datetime.utcnow()
+
+# Get the timestamp from 7 days ago
+one_week_ago = current_time - timedelta(days=7)
+
+# Convert both times to Unix timestamps
+start_time = int(one_week_ago.timestamp())
+end_time = int(current_time.timestamp())
+
+# Fetch temperature observations from the closest station in the past week
+observations = client.get_observations(
+    parameter=Parameter.TemperaturePast1h,  # Parameter for past 1-hour temperatures
+    start_time=start_time,
+    end_time=end_time,
+    latitude=latitude,
+    longitude=longitude
+=======
 # Define DLT Snowflake pipeline
 p = dlt.pipeline(
     pipeline_name='snowflake_pipeline_pipeline',
     destination='snowflake',
     dataset_name='Staging1',
+>>>>>>> d87e0d819adc6821c87d86d1db17ab1a9a820bf6
 )
 
 # Function to get events
