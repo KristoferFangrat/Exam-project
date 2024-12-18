@@ -109,7 +109,14 @@ GRANT INSERT,
 UPDATE,
 DELETE ON FUTURE TABLES IN SCHEMA EXAM_DB.STAGING2 TO ROLE ExamDLTRole;
 
---- Granting INSERT, UPDATE, DELETE to DBT Role STAGING
+"""    
+   ___                             _        _              __ _  
+  / __|     _ _   __ _    _ _     | |_     (_)    _ _     / _` | 
+ | (_ |    | '_| / _` |  | ' \    |  _|    | |   | ' \    \__, | 
+  \___|   _|_|_  \__,_|  |_||_|   _\__|   _|_|_  |_||_|   |___/  
+_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""| 
+"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'                                                                                  
+"""
 GRANT INSERT,
 UPDATE,
 DELETE ON ALL TABLES IN SCHEMA EXAM_DB.Staging1 TO ROLE ExamDBTRole;

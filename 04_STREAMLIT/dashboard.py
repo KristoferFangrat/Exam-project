@@ -1,4 +1,5 @@
 import streamlit as st
+<<<<<<< HEAD
 import pandas as pd
 import matplotlib.pyplot as plt
 from connect_data_warehouse import query_police_events
@@ -70,4 +71,20 @@ def layout():
     st.download_button(label="Download data as CSV", data=csv, file_name='filtered_data.csv', mime='text/csv')
 
 if __name__ == '__main__':
+=======
+from connect import query_events
+
+
+def layout():
+    df = query_events()
+    st.title("New title")
+    st.write('''This dashboard displays educational ads sourced from Arbetsförmedlingen's API.:hibiscus:''')
+
+    st.dataframe(df)
+
+
+
+
+if __name__ == "__main__":
+>>>>>>> 01649b0722c62552040360ddce9c012f285d23be
     layout()
