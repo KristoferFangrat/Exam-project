@@ -30,10 +30,11 @@ end_time = int(current_time.timestamp())
 
 # Fetch temperature observations from the closest station in the past week
 observations = client.get_observations(
-    station_id=closest_station.id,  # ID of the closest station
     parameter=Parameter.TemperaturePast1h,  # Parameter for past 1-hour temperatures
     start_time=start_time,
-    end_time=end_time
+    end_time=end_time,
+    latitude=latitude,
+    longitude=longitude
 )
 
 # Display the fetched data

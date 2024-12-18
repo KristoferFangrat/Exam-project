@@ -2,7 +2,6 @@ import dlt
 import requests
 import os
 from pathlib import Path
-import pandas as pd
 from datetime import datetime
 
 # Ange koordinater för platsen
@@ -16,39 +15,34 @@ def get_events():
     response.raise_for_status()
     return response.json()
 
-def extract_relevant_data_smhi(weather_data, start_index, end_index):
+def extract_relevant_data_smhi(weather_data):
     relevant_data = []
-    for entry in weather_data["timeSeries"][start_index:end_index]:
+    for entry in weather_data["timeSeries"]:
         valid_time = entry["validTime"]
-        tid = datetime.fromisoformat(valid_time[:])
+        tid = datetime.fromisoformat(valid_time)
 
-        är_nederbörd = False
+        temperature = None
+        precipitation = None
         for parameter in entry["parameters"]:
             if parameter["name"] == "t":
                 temperature = parameter["values"][0]
-            elif parameter["name"] == "pcat" and parameter["values"][0] > 0:
-                är_nederbörd = True
+            elif parameter["name"] == "pcat":
+                precipitation = parameter["values"][0]
                 
-        if är_nederbörd:
-            precipitation = "Nederbörd"
-        else:
-            precipitation = "Ingen nederbörd"
-
         relevant_data.append({
-            "Tid": tid,
-            "Temperatur (°C)": temperature,
-            "Nederbörd": precipitation,
-            "Provider": "SMHI"
+            "Time": tid,
+            "Temperature": temperature,
+            "Precipitation": precipitation
         })
     return relevant_data
 
-
-@dlt.resource(write_disposition="append")
+@dlt.resource(write_disposition="replace")
 def event_resource():
     events = get_events()
-    for event in events:
+    relevant_data = extract_relevant_data_smhi(events)
+    for event in relevant_data:
+        # print(event)  # Debugging: Print each event before yielding
         yield event
-
 
 def load_stuff() -> None:
     # specify the pipeline name, destination and dataset name when configuring pipeline,
@@ -56,12 +50,13 @@ def load_stuff() -> None:
     p = dlt.pipeline(
         pipeline_name='snowflake_pipeline_pipeline',
         destination='snowflake',
-        dataset_name='Staging2',
+        dataset_name='Staging2'
     )
     p.run(event_resource())
-
 
 if __name__ == "__main__":
     working_directory = Path(__file__).parent
     os.chdir(working_directory)
     load_stuff()
+
+# OLiEVoiNA_1915!
