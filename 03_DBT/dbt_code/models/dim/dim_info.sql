@@ -6,3 +6,5 @@ SELECT
     info_summary
 
 FROM src_info
+WHERE info_name IS NOT NULL
+AND info_summary IS NOT NULL
