@@ -1,17 +1,23 @@
+'''
+   _____      __                 ____        __         
+  / ___/___  / /___  ______     / __ \____  / /__  _____
+  \__ \/ _ \/ __/ / / / __ \   / /_/ / __ \/ / _ \/ ___/
+ ___/ /  __/ /_/ /_/ / /_/ /  / _, _/ /_/ / /  __(__  ) 
+/____/\___/\__/\__,_/ .___/  /_/ |_|\____/_/\___/____/  
+                   /_/                                                           
+'''
 USE ROLE USERADMIN;
-
---- Creating roles
 CREATE ROLE IF NOT EXISTS ExamDLTRole COMMENT = 'Role for data ingestion.';
 CREATE ROLE IF NOT EXISTS ExamDBTRole COMMENT = 'Role for data transformation.';
 CREATE ROLE IF NOT EXISTS ExamAnalystRole COMMENT = 'Role for data analysis.';
 
 USE ROLE SECURITYADMIN;
 
---- Granting acces to warehouses
+
 GRANT USAGE ON WAREHOUSE EXAM_WH TO ROLE ExamDLTRole;
 GRANT USAGE ON WAREHOUSE EXAM_WH TO ROLE ExamDBTRole;
 
---- Granting acces to databases
+
 GRANT USAGE ON DATABASE EXAM_DB TO ROLE ExamDLTRole;
 GRANT USAGE ON DATABASE EXAM_DB TO ROLE ExamDBTRole;
 GRANT USAGE ON DATABASE EXAM_DB TO ROLE ExamAnalystRole;
@@ -100,14 +106,7 @@ GRANT INSERT,
 UPDATE,
 DELETE ON FUTURE TABLES IN SCHEMA EXAM_DB.STAGING2 TO ROLE ExamDLTRole;
 
-"""    
-   ___                             _        _              __ _  
-  / __|     _ _   __ _    _ _     | |_     (_)    _ _     / _` | 
- | (_ |    | '_| / _` |  | ' \    |  _|    | |   | ' \    \__, | 
-  \___|   _|_|_  \__,_|  |_||_|   _\__|   _|_|_  |_||_|   |___/  
-_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""|_|"""""| 
-"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'"`-0-0-'                                                                                  
-"""
+
 GRANT INSERT,
 UPDATE,
 DELETE ON ALL TABLES IN SCHEMA EXAM_DB.Staging1 TO ROLE ExamDBTRole;
@@ -169,4 +168,5 @@ GRANT ROLE ExamAnalystRole TO USER TimExamUser;
 USE DATABASE EXAM_DB;
 GRANT CREATE TABLE ON SCHEMA STAGING1 TO ROLE ExamDLTRole;
 GRANT CREATE TABLE ON SCHEMA STAGING2 TO ROLE ExamDLTRole;
+
 

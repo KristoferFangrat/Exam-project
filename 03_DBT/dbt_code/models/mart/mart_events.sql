@@ -5,15 +5,16 @@ location AS (SELECT * FROM {{ ref('dim_location') }}),
 weather AS (SELECT * FROM {{ ref('dim_weather') }})
 
 SELECT DISTINCT
-    {{ dbt_utils.generate_surrogate_key(['info_name', 'info_summary']) }} AS mart_id,
-    info_name,
-    info_summary,
-    location_name,
-    location_gps,
-    datetime,
-    weather.TEMPERATURE,
-    weather.PRECIPITATION,
-    REGEXP_SUBSTR(info_name, ', (.*?),', 1, 1, 'e', 1) AS category
+    info_name AS Event,
+    info_summary AS Summary,
+    location_name AS Location,
+    location_gps AS Coordinates,
+    datetime AS Time,
+    weather.TEMPERATURE AS Temperature,
+    weather.PRECIPITATION AS Precipitation,
+    REGEXP_SUBSTR(info_name, ', (.*?),', 1, 1, 'e', 1) AS Category,
+    latitude,
+    longitude
 
 FROM events
 LEFT JOIN info ON events.info_key = info.info_id
