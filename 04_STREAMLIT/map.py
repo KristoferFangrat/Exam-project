@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from connect_data_warehouse import query_events
+from connect import query_events
 
 def main():
     st.title("Event Map")
