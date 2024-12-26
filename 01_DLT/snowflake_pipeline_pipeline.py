@@ -20,9 +20,7 @@ def event_resource():
 
 
 def load_events() -> None:
-    global p
-    # specify the pipeline name, destination and dataset name when configuring pipeline,
-    # otherwise the defaults will be used that are derived from the current script name
+
     p = dlt.pipeline(
         pipeline_name='snowflake_pipeline_pipeline',
         destination='snowflake',

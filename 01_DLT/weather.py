@@ -15,20 +15,17 @@ def get_events():
 def get_weather():
     """Fetch weather data for all events."""
     event_response = get_events()
-    weather_data_rows = []  # List to collect weather data as rows
+    weather_data_rows = []  
 
     for event in event_response:
         try:
-            # Extract latitude, longitude, and datetime
             lat, lon = map(float, event["location"]["gps"].split(","))
             event_date = event["datetime"][0:10]
             time = event["name"].split(",")[0].split()[-1]
-            # placeholder_date = "2024-12-18"
             full_datetime_str = f"{event_date} {time.replace('.', ':')}"
             parsed_datetime = datetime.strptime(full_datetime_str, "%Y-%m-%d %H:%M")
             target_hour = parsed_datetime.strftime("%Y-%m-%dT%H:00")
             
-            # Call weather API
             weather_url = (f"https://historical-forecast-api.open-meteo.com/v1/forecast"
                            f"?latitude={lat}&longitude={lon}&start_date={event_date}&end_date={event_date}"
                            f"&hourly=temperature_2m,precipitation&timezone=Europe%2FBerlin")
@@ -42,7 +39,7 @@ def get_weather():
             temperature_list = hourly_data.get('temperature_2m', [])
             precipitation_list = hourly_data.get('precipitation', [])
 
-            # Find matching weather data for target_hour
+            # Hittar matchande väder från event
             if target_hour in time_list:
                 index = time_list.index(target_hour)
                 weather_data_rows.append({
