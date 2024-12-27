@@ -154,7 +154,7 @@ def layout():
             filtered_data = df[df["LOCATION"] == selected_category]
             map()
         elif find == "Datum":
-            options = sorted(df["TIME"].unique().tolist())  # Gör om till lista och sortera
+            options = sorted(df["TIME"].unique().tolist()) 
 
             selected_category = st.select_slider("Välj en tid:", options)
             filtered_data = df[df["TIME"] == selected_category]

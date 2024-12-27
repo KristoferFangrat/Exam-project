@@ -33,13 +33,11 @@ def get_weather():
             weather_response.raise_for_status()
             weather_data = weather_response.json()
 
-            # Extract hourly weather data
             hourly_data = weather_data.get('hourly', {})
             time_list = hourly_data.get('time', [])
             temperature_list = hourly_data.get('temperature_2m', [])
             precipitation_list = hourly_data.get('precipitation', [])
 
-            # Hittar matchande väder från event
             if target_hour in time_list:
                 index = time_list.index(target_hour)
                 weather_data_rows.append({
@@ -70,7 +68,7 @@ def load_events() -> None:
         destination='snowflake',
         dataset_name='Staging1',
     )
-    # Load weather data into Snowflake
+
     load_info = p.run(weather_resource())
     print(f"Loaded data to Snowflake: {load_info}")
 

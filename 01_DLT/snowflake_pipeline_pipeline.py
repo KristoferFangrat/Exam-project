@@ -2,8 +2,7 @@ import dlt
 import requests
 import os
 from pathlib import Path
-import pandas as pd
-from datetime import datetime
+
 
 url = "https://polisen.se/api/events"
 def get_events():
