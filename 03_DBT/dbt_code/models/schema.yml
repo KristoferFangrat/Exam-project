@@ -42,3 +42,17 @@ models:
             - relationships:
                 to: ref('dim_date')
                 field: date_id
+    - name: fct_events
+      columns:
+        - name: info_key
+          data_tests:
+            - relationships:
+                to: ref('dim_info')
+                field: info_id
+    - name: fct_events
+      columns:
+        - name: location_key
+          data_tests:
+            - relationships:
+                to: ref('dim_location')
+                field: location_id
