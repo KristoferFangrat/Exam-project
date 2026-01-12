@@ -2,8 +2,7 @@ import dlt
 import requests
 import os
 from pathlib import Path
-import pandas as pd
-from datetime import datetime
+
 
 url = "https://polisen.se/api/events"
 def get_events():
@@ -20,9 +19,7 @@ def event_resource():
 
 
 def load_events() -> None:
-    global p
-    # specify the pipeline name, destination and dataset name when configuring pipeline,
-    # otherwise the defaults will be used that are derived from the current script name
+
     p = dlt.pipeline(
         pipeline_name='snowflake_pipeline_pipeline',
         destination='snowflake',

@@ -1,3 +1,11 @@
+'''
+   _____      __                 ____        __         
+  / ___/___  / /___  ______     / __ \____  / /__  _____
+  \__ \/ _ \/ __/ / / / __ \   / /_/ / __ \/ / _ \/ ___/
+ ___/ /  __/ /_/ /_/ / /_/ /  / _, _/ /_/ / /  __(__  ) 
+/____/\___/\__/\__,_/ .___/  /_/ |_|\____/_/\___/____/  
+                   /_/                                                           
+'''
 USE ROLE USERADMIN;
 
 --- Creating roles
@@ -83,7 +91,7 @@ GRANT SELECT ON FUTURE VIEWS IN SCHEMA BROTT_DB.Mart TO ROLE AnalystRole;
 GRANT SELECT ON ALL VIEWS IN SCHEMA BROTT_DB.WAREHOUSE TO ROLE AnalystRole;
 
 
---- Granting INSERT, UPDATE, DELETE to DLT Role
+
 GRANT INSERT,
 UPDATE,
 DELETE ON ALL TABLES IN SCHEMA BROTT_DB.Staging1 TO ROLE DLTRole;
@@ -117,16 +125,16 @@ GRANT INSERT,
 UPDATE,
 DELETE ON FUTURE TABLES IN SCHEMA BROTT_DB.Staging2 TO ROLE DBTRole;
 
---- Granting INSERT, UPDATE, DELETE to DBT Role WAREHOUSE
-GRANT INSERT,
-UPDATE,
-DELETE ON FUTURE TABLES IN SCHEMA BROTT_DB.warehouse TO ROLE DBTRole;
 
 GRANT INSERT,
 UPDATE,
 DELETE ON FUTURE TABLES IN SCHEMA BROTT_DB.warehouse TO ROLE DBTRole;
 
---- Granting INSERT, UPDATE, DELETE to ANALYST Role MART
+GRANT INSERT,
+UPDATE,
+DELETE ON FUTURE TABLES IN SCHEMA BROTT_DB.warehouse TO ROLE DBTRole;
+
+
 GRANT INSERT,
 UPDATE,
 DELETE ON ALL TABLES IN SCHEMA BROTT_DB.mart TO ROLE AnalystRole;
