@@ -1,10 +1,11 @@
 import streamlit as st
 import pandas as pd
 from connect import query_events
+import plotly.express as px
 
 def main():
     st.title("Event Map")
-    menu = ["Home", "Category", "Location", "Percipitation", "Temperature"]
+    menu = ["Home", "Category", "Location"]
 
     choice = st.sidebar.selectbox("Menu", menu)
 
@@ -13,9 +14,17 @@ def main():
 
     if choice == "Home":
         st.write("Welcome to the Home page")
-        
-        #st.write("DataFrame columns:", df.columns.tolist())
 
+        with st.expander("Data View"):
+            st.dataframe(df)
+
+        #fig = px.scatter_mapbox(df, lat="LATITUDE", lon="LONGITUDE", hover_name="LOCATION", hover_data=["CATEGORY"], zoom=2.3)
+
+        #fig.update_traces(marker=dict(color="red", size=6))
+
+        #fig.update_layout(mapbox_style="carto-darkmatter")
+        #st.plotly_chart(fig, key="home_map")
+        
         # Filter data based on location
         if "LOCATION" in df.columns:
             location_options = ["All"] + df["LOCATION"].unique().tolist()
@@ -55,7 +64,10 @@ def main():
 
         # Display map with filtered data
         if "LATITUDE" in filtered_df.columns and "LONGITUDE" in filtered_df.columns:
-            st.map(filtered_df[["LATITUDE", "LONGITUDE"]])
+            fig = px.scatter_mapbox(filtered_df, lat="LATITUDE", lon="LONGITUDE", hover_name="LOCATION", hover_data=["CATEGORY"], zoom=2.3)
+            fig.update_traces(marker=dict(color="red", size=6))
+            fig.update_layout(mapbox_style="carto-darkmatter")
+            st.plotly_chart(fig, key="filtered_map")
         else:
             st.warning("Latitude and longitude columns are missing in the data.")
         
@@ -84,7 +96,10 @@ def main():
                 filtered_df = df[df["CATEGORY"] == selected_category]
             
             if not filtered_df.empty:
-                st.map(filtered_df[['LATITUDE', 'LONGITUDE']])
+                fig = px.scatter_mapbox(filtered_df, lat="LATITUDE", lon="LONGITUDE", hover_name="LOCATION", hover_data=["CATEGORY"], zoom=2.3)
+                fig.update_traces(marker=dict(color="red", size=6))
+                fig.update_layout(mapbox_style="carto-darkmatter")
+                st.plotly_chart(fig, key="category_map")
                 st.dataframe(filtered_df)
             else:
                 st.warning("No data found for the selected category.")
@@ -96,7 +111,10 @@ def main():
         if location:
             filtered_df = df[df['LOCATION'].str.contains(location, case=False, na=False)]
             if not filtered_df.empty:
-                st.map(filtered_df[['LATITUDE', 'LONGITUDE']])
+                fig = px.scatter_mapbox(filtered_df, lat="LATITUDE", lon="LONGITUDE", hover_name="LOCATION", hover_data=["CATEGORY"], zoom=2.3)
+                fig.update_traces(marker=dict(color="red", size=6))
+                fig.update_layout(mapbox_style="carto-darkmatter")
+                st.plotly_chart(fig, key="location_map")
                 st.dataframe(filtered_df)
             else:
                 st.warning("No data found for the entered location.")

@@ -1,61 +1,152 @@
 import streamlit as st
+from connect import query_events
 import pandas as pd
 import numpy as np
-from connect_data_warehouse import query_events
-
+import plotly.express as px
+from st_aggrid import AgGrid, GridOptionsBuilder
 def layout():
     df = query_events()
-    st.title("New title")
-    st.write('''This dashboard displays educational ads sourced from Arbetsförmedlingen's API.:hibiscus:''')
+    
+    menu = ["Home", "Event Finder", "About"]
 
-    # Print DataFrame columns
-    st.write("DataFrame columns:", df.columns.tolist())
+    choice = st.sidebar.selectbox("Menu",menu)
 
-    # Filter data based on location
-    if "LOCATION" in df.columns:
-        location_options = ["All"] + df["LOCATION"].unique().tolist()
-        selected_location = st.selectbox("Select Location", location_options)
+    if choice == "Home":
+        st.title("Polisens händelseöversikt")
+        st.write('''På den här sidan hittar du statistik och information om svenska polisens händelser ute i fält. 
+                 Titta i statistiken eller sök efter specifika händelser. Utöver Polisens händerlser så kan du då en insikt 
+                 över väderförhållanden på plats.''')
+        cols_1 = st.columns(2)
+        cols_2 = st.columns(2)
+        with cols_1[0]:
+            st.bar_chart(
+            query_events(
+                """
+                    SELECT 
+                        COUNT(CATEGORY) as AMOUNT_CATEGORY,
+                        CATEGORY
+                    FROM 
+                        mart_events
+                    GROUP BY 
+                        CATEGORY
+                    ORDER BY AMOUNT_CATEGORY DESC LIMIT 5;
+                    """
+            ),
+            x="CATEGORY",
+            y="AMOUNT_CATEGORY",
+            )
+        with cols_1[1]:
+            st.bar_chart(
+            query_events(
+                """
+                    SELECT 
+                        COUNT(LOCATION) as TOT_EVENTS,
+                        LOCATION
+                    FROM 
+                        mart_events
+                    GROUP BY 
+                        LOCATION
+                    ORDER BY TOT_EVENTS DESC LIMIT 5;
+                    """
+            ),
+            x="LOCATION",
+            y="TOT_EVENTS",
+            )
+        with cols_2[0]:
+           st.bar_chart(
+            query_events(
+                """
+                    SELECT 
+                        MIN(TEMPERATURE) as MIN_TEMPERATURE,
+                        LOCATION
+                    FROM 
+                        mart_events
+                    GROUP BY 
+                        LOCATION
+                    ORDER BY MIN_TEMPERATURE ASC LIMIT 5;
+                    """
+            ),
+            x="LOCATION",
+            y="MIN_TEMPERATURE",
+            ) 
+        with cols_2[1]:
+           st.bar_chart(
+            query_events(
+                """
+                    SELECT 
+                        MAX(TEMPERATURE) as MAX_TEMPERATURE,
+                        LOCATION
+                    FROM 
+                        mart_events
+                    GROUP BY 
+                        LOCATION
+                    ORDER BY MAX_TEMPERATURE DESC LIMIT 5;
+                    """
+            ),
+            x="LOCATION",
+            y="MAX_TEMPERATURE",
+            )
+
+        selected_location = st.selectbox("Select a location:", df["LOCATION"].unique())
         
-        if selected_location == "All":
-            filtered_df = df
-        else:
-            filtered_df = df[df["LOCATION"] == selected_location]
+        st.line_chart(
+            query_events(
+                f"""
+                    SELECT 
+                        TIME,
+                        PRECIPITATION,
+                        LOCATION
+                    FROM 
+                        mart_events
+                    WHERE 
+                        LOCATION = '{selected_location}'
+                    ;
+                """
+            ),
+            x="TIME",
+            y="PRECIPITATION",
+            )
         
-        with st.container():
-            # Create columns
-            col1, col2, col3, col4, col5 = st.columns(5)
+    
 
-            # Display metrics in columns
-            col1.markdown(f"<p style='font-size:20px;'>Total Events: {filtered_df.shape[0]}</p>", unsafe_allow_html=True)
-            
-            if "CATEGORY" in filtered_df.columns:
-                total_categories = filtered_df["CATEGORY"].nunique()
-                col2.markdown(f"<p style='font-size:20px;'>Total Categories: {total_categories}</p>", unsafe_allow_html=True)
-                top_category = filtered_df["CATEGORY"].value_counts().idxmax()
-                col3.markdown(f"<p style='font-size:20px;'>Most Frequent Category: {top_category}</p>", unsafe_allow_html=True)
-            else:
-                st.warning("Category column is missing in the data.")
-            
-            if "LOCATION" in filtered_df.columns:
-                top_kommun = filtered_df["LOCATION"].value_counts().idxmax()
-                col4.markdown(f"<p style='font-size:20px;'>Top Kommun: {top_kommun}</p>", unsafe_allow_html=True)
-            else:
-                st.warning("Kommun column is missing in the data.")
-            
-            if "TEMPERATURE" in filtered_df.columns:
-                lowest_temperature = filtered_df["TEMPERATURE"].min()
-                col5.markdown(f"<p style='font-size:20px;'>Lowest Temperature: {lowest_temperature}</p>", unsafe_allow_html=True)
-            else:
-                st.warning("Temperature column is missing in the data.")
+    elif choice == "Event Finder":
+        st.title("Find an Event")
+        selected_category = st.selectbox("Select a category:", df["CATEGORY"].unique())
 
-        if "LATITUDE" in filtered_df.columns and "LONGITUDE" in filtered_df.columns:
-            st.map(filtered_df[["LATITUDE", "LONGITUDE"]])
-        else:
-            st.warning("Latitude and longitude columns are missing in the data.")
+        st.subheader("Event Information")
+        filtered_data = df[df["CATEGORY"] == selected_category]
+        fig = px.scatter_mapbox(filtered_data, lat="LATITUDE", lon="LONGITUDE", hover_name="LOCATION", hover_data=[ "CATEGORY"], color_discrete_sequence=["red"],zoom=4, height=800)
+
+        fig.update_layout(mapbox_style="open-street-map")
+        st.plotly_chart(fig)
+        sorted_events = sorted(filtered_data["EVENT"].unique())
+        selected_event_name = st.selectbox("Select a event:", filtered_data["EVENT"].unique())
+        selected_event = filtered_data[filtered_data["EVENT"] == selected_event_name].iloc[0]
+
+        st.write(f"**Category:** {selected_event['CATEGORY']}")
+        st.write(f"**Event:** {selected_event['EVENT']}")
+        st.write(f"**Location:** {selected_event['LOCATION']}")
+       
+        st.write(f"**Summary:** {selected_event['SUMMARY']}")
+        st.write(f"**Time:** {selected_event['TIME']}")
+        st.write(f"**Temperature:** {selected_event['TEMPERATURE']}°C")
+        st.write(f"**Precipitation:** {selected_event['PRECIPITATION']} mm")
         
-        st.dataframe(filtered_df)
+
+        
     else:
-        st.warning("Location column is missing in the data.")
+        st.subheader("About")
+    
+
+    
+
+
+    
+
+
+    
+    
+
 
 if __name__ == "__main__":
     layout()
